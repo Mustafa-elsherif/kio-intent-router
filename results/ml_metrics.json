@@ -46,7 +46,7 @@
     "negation": "3/8",
     "plain": "7/8"
   },
-  "latency_ms_per_message": 0.06047000060789287,
+  "latency_ms_per_message": 0.04173999768681824,
   "projection_2d": {
     "method": "PCA(2) fitted on the training split, then linear SVC",
     "C": 1,

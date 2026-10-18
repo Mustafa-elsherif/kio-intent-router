@@ -144,7 +144,7 @@ in section 4.
 Trained on 40, evaluated once on the 20 test messages:
 
 * train accuracy **0.975**, test accuracy **0.600**, macro F1 **0.583**
-* prediction latency **0.06 ms/message** on CPU (median of 51 repeats)
+* prediction latency **well under 0.1 ms/message** on CPU (median of 51 repeats; 0.04-0.06 ms across runs - it is a timing, not a deterministic metric)
 
 Figures: `ml_decision_boundary.png` (boundary in a 2D PCA projection of the
 selected feature space; the 2D model itself scores 0.825 train / 0.650 test),
@@ -335,7 +335,7 @@ Reasons, in order of weight:
 
 Costs we accept, and how to manage them:
 
-* **Latency**: 546 ms vs 0.06 ms per message - roughly 9 000x slower. Acceptable
+* **Latency**: 546 ms vs well under 0.1 ms per message - four orders of magnitude slower. Acceptable
   for a chat turn; if it is not, cache repeated messages or batch on GPU.
 * **Size**: a 1.6 GB model in memory versus a few kilobytes. It is MIT-licensed
   and runs offline, so there is no per-call fee and no customer data leaving the

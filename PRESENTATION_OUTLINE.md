@@ -157,7 +157,7 @@ id 25  "Before I buy a second license, can you fix the error the       -> flag 0
 * **Permutation importance:** the strongest single feature is the **question
   mark** (0.080 accuracy drop); **negation is almost unused** (0.007). That one
   fact explains the errors on the next slide.
-* Latency **0.06 ms/message** (median of 51 repeats) - about **9 000x faster** than the decision model.
+* Latency **well under 0.1 ms/message** (median of 51 repeats; 0.04-0.06 ms across runs) - about **four orders of magnitude faster** than the decision model.
 
 ### Slide 9 - Head to head (0:45)
 
@@ -168,7 +168,7 @@ id 25  "Before I buy a second license, can you fix the error the       -> flag 0
 | Recall (support) | **0.400** | **1.000** |
 | Recall (sales) | 0.800 | 0.900 |
 | plain / negation / mixed | 7/8, 3/8, 2/4 | 8/8, 7/8, 4/4 |
-| Latency per message | 0.06 ms | 546 ms |
+| Latency per message | < 0.1 ms | 546 ms |
 | Labelled data needed | 40 and still rising | **0** |
 
 * The routers **agree on 65%** of test messages. Where they disagree, the

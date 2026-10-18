@@ -41,7 +41,7 @@ Full write-up: **[REPORT.md](REPORT.md)** | presentation plan:
 | Precision (support) | 0.667 | 0.909 |
 | Recall (support) | **0.400** | **1.000** |
 | plain / negation / mixed | 7/8, 3/8, 2/4 | 8/8, 7/8, 4/4 |
-| Latency per message (CPU) | 0.06 ms | 546 ms |
+| Latency per message (CPU) | < 0.1 ms | 546 ms |
 | Labelled examples needed | 40, curve still rising | **0** |
 
 Confusion matrices (rows = true, columns = predicted):
@@ -130,6 +130,26 @@ appears on a slide against `results/*.json` and refuses to build if one drifted.
 ```powershell
 & $py src\agents.py "my bill is wrong but I also want a faster plan"
 ```
+
+### Loading the trained router from your own code
+
+The saved pipeline's first step is `features.HandcraftedFeatures`, so unpickling
+it runs `import features`. Use `common.load_router()`, which puts `src/` on
+`sys.path` first (resolved from the package, not from the working directory), and
+the model loads from any directory:
+
+```python
+import sys
+sys.path.insert(0, r"D:\year3\kio_project\src")
+from common import load_router
+
+router = load_router()
+router.predict(["my bill is wrong"])     # -> array([0])
+```
+
+A bare `joblib.load("models/ml_router.joblib")` raises
+`ModuleNotFoundError: No module named 'features'` unless `src/` is already
+importable.
 
 ## Repository layout
 

@@ -8,6 +8,7 @@ share lives here.
 """
 from pathlib import Path
 import json
+import sys
 
 import numpy as np
 import matplotlib
@@ -20,8 +21,10 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
 RESULTS_DIR = ROOT / "results"
 MODELS_DIR = ROOT / "models"
+SRC_DIR = ROOT / "src"
 DATASET_CSV = DATA_DIR / "messages.csv"
 GROUPS_CSV = DATA_DIR / "message_groups.csv"
+ROUTER_MODEL = MODELS_DIR / "ml_router.joblib"
 
 # Routing flag convention required by the assignment.
 SUPPORT, SALES = 0, 1
@@ -43,6 +46,28 @@ GRID = "#e4e3df"
 def ensure_dirs():
     for d in (DATA_DIR, RESULTS_DIR, MODELS_DIR):
         d.mkdir(parents=True, exist_ok=True)
+
+
+def ensure_src_on_path():
+    """Put src/ on sys.path so pickled project classes resolve.
+
+    The saved router is a scikit-learn Pipeline whose first step is
+    features.HandcraftedFeatures, so unpickling it runs `import features`. That
+    only works if src/ is importable, which it is not when the loading process
+    was started from the repo root or anywhere else. The path is derived from
+    this file, never from the current working directory.
+    """
+    src = str(SRC_DIR)
+    if src not in sys.path:
+        sys.path.insert(0, src)
+    return src
+
+
+def load_router(path=None):
+    """Load the trained traditional-ML router from any working directory."""
+    import joblib
+    ensure_src_on_path()
+    return joblib.load(path or ROUTER_MODEL)
 
 
 def compute_metrics(y_true, y_pred):

@@ -354,7 +354,10 @@ def verify_numbers():
         ("ml recall sales", round(ml["test"]["recall_sales"], 3), 0.800),
         ("ml C", ml["selected"]["C"], 1),
         ("ml features", ml["n_features"], 11),
-        ("ml latency ms", round(ml["latency_ms_per_message"], 2), 0.06),
+        # Latency is a timing, not a deterministic metric: it moves run to run
+        # (0.04-0.06 ms observed). Assert the order of magnitude the slides claim
+        # ("well under 0.1 ms"), not a digit the machine cannot reproduce.
+        ("ml latency under 0.1 ms", 0.005 < ml["latency_ms_per_message"] < 0.1, True),
         ("ml cv tfidf", round(ml["cv_best_per_feature_set"]["tfidf_1_1"], 3), 0.725),
         # the count of cross-validated configurations, read from the CV table itself
         ("ml n configs", sum(1 for _ in (RESULTS / "ml_cv_results.csv")
@@ -763,7 +766,8 @@ def slide8(prs):
     right = [
         "Permutation importance: the strongest single feature is the question mark (0.080 accuracy "
         "drop); negation is almost unused (0.007).",
-        "Latency 0.06 ms/message - about 9 000x faster than the decision model.",
+        "Latency well under 0.1 ms/message (median of 51 repeats) - about four orders of "
+        "magnitude faster than the decision model.",
     ]
     col_w = (CONTENT_W - 0.6) / 2
     bullets(s, items, MARGIN, 5.02, col_w, pt=SMALL_PT, gap=0.18, label="s8 left")
@@ -796,7 +800,7 @@ def slide9(prs):
         ("Recall (support)", "0.400", "1.000"),
         ("Recall (sales)", "0.800", "0.900"),
         ("plain / negation / mixed", "7/8, 3/8, 2/4", "8/8, 7/8, 4/4"),
-        ("Latency per message", "0.06 ms", "546 ms"),
+        ("Latency per message", "< 0.1 ms", "546 ms"),
         ("Labelled data needed", "40 and still rising", "0"),
     ]
     widths = [2.55, 2.00, 2.05]

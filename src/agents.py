@@ -19,9 +19,8 @@ import sys
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
 os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
 
-import joblib
-
-from common import MODELS_DIR, RESULTS_DIR, SUPPORT, SALES, FLAG_NAMES, ensure_dirs
+from common import (RESULTS_DIR, SUPPORT, SALES, FLAG_NAMES, ensure_dirs,
+                    load_router as _load_router)
 
 DEMO_MESSAGES = [
     "My internet has been down since yesterday, and I may want a faster plan later.",
@@ -53,7 +52,7 @@ def dispatch(message, flag):
 
 def ml_router():
     """Load the trained traditional-ML router. Returns message -> flag."""
-    model = joblib.load(MODELS_DIR / "ml_router.joblib")
+    model = _load_router()
     return lambda m: int(model.predict([m])[0])
 
 
