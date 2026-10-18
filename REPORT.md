@@ -1,9 +1,9 @@
-# Project 1 — Intent Routing for Agent KIO
+# Project 1 - Intent Routing for Agent KIO
 
 **Task.** KIO is a customer-facing chatbot with two specialist agents. Our block is
 the *intent router*: message in, routing flag out, `0 = support`, `1 = sales`.
-KIO uses the flag to call the selected agent. We built the router twice — once as
-a **trained ML classifier**, once as a **decision model** — and compared both on
+KIO uses the flag to call the selected agent. We built the router twice - once as
+a **trained ML classifier**, once as a **decision model** - and compared both on
 the same flag and the same test messages.
 
 All numbers in this report come from runs executed on this machine. Every script
@@ -33,19 +33,19 @@ contain *nothing is wrong*, *no problems*, *doesn't*.
 
 ### 1.2 Labeling guideline (agreed before any model was run)
 
-* **0 — support**: a problem, fault, complaint, billing error, missing delivery,
+* **0 - support**: a problem, fault, complaint, billing error, missing delivery,
   refund, account-access issue, or a request about an existing service
   (including cancellation).
-* **1 — sales**: a new purchase, upgrade, add-on, price, quote or plan
+* **1 - sales**: a new purchase, upgrade, add-on, price, quote or plan
   recommendation, with **no unresolved existing problem**.
 * **Priority rule for mixed intent**: if a message mixes an *unresolved* existing
-  problem with purchase interest, it is **0 — support**. A problem that the
+  problem with purchase interest, it is **0 - support**. A problem that the
   message states is already resolved does not count.
 
 ### 1.3 Split
 
 40 training / 20 test, class-balanced, split **at group level** with seed 42, so a
-paraphrase and its base message are always in the same split — a model is never
+paraphrase and its base message are always in the same split - a model is never
 tested on the near-duplicate of something it trained on. Categories are
 stratified too.
 
@@ -72,28 +72,28 @@ Files: `data/messages.csv` (`id, message, label, split`), `data/message_groups.c
 
 ---
 
-## 2. Approach 1 — Traditional ML classifier
+## 2. Approach 1 - Traditional ML classifier
 
 ### 2.1 Numeric features
 
 Two representations were built and both were offered to the model search:
 
-* **TF-IDF** — weights of word n-grams, lower-cased, sublinear tf, L2-normalised.
+* **TF-IDF** - weights of word n-grams, lower-cased, sublinear tf, L2-normalised.
   Stop words are **kept**, because *not / no / never* carry the negation cases.
-* **HAND** — 11 interpretable numeric features (`src/features.py`): message length
+* **HAND** - 11 interpretable numeric features (`src/features.py`): message length
   in words and characters, presence of `?`, support-lexicon hits per 10 words,
   sales-lexicon hits per 10 words, their margin, negation hits, existing-service
   hits, new-purchase hits, money-word hits, and a first-person-request flag.
   The two lexicons were fixed **a priori** from the routing definition in the
   brief and never tuned on the test split.
-* **UNION** — the concatenation of both.
+* **UNION** - the concatenation of both.
 
 ### 2.2 Model selection
 
 Model families allowed by the brief were all searched: **linear SVM**,
 **degree-2 polynomial-kernel SVM**, and **logistic regression on degree-2
 polynomial features** (the polynomial *expansion* is only run on the 11
-hand-crafted features — expanding thousands of TF-IDF columns to their pairwise
+hand-crafted features - expanding thousands of TF-IDF columns to their pairwise
 products is intractable here; the polynomial *kernel* covers the non-linear case
 for the sparse representations).
 
@@ -113,7 +113,7 @@ Best CV accuracy per feature set:
 
 **Selected: `hand` features + SVM with a degree-2 polynomial kernel, C = 1**
 (`coef0 = 1.0`, `gamma = "scale"`, features standardised), CV accuracy
-0.825 ± 0.100, 11 features.
+0.825 +/- 0.100, 11 features.
 
 Pure TF-IDF scored worst, and that is the expected result at this scale: with 40
 training messages the unseen test messages share almost no vocabulary with the
@@ -122,7 +122,7 @@ training ones, so bag-of-words has nothing to generalise from.
 ### 2.3 What the model learned
 
 Permutation importance on the training split (accuracy drop when one feature is
-shuffled, 50 repeats — `results/ml_feature_importance.csv`):
+shuffled, 50 repeats - `results/ml_feature_importance.csv`):
 
 | feature | accuracy drop |
 |---|---|
@@ -135,7 +135,7 @@ shuffled, 50 repeats — `results/ml_feature_importance.csv`):
 | negation_hits | 0.007 |
 | n_words | 0.001 |
 
-The classifier leans most on a **surface cue — the question mark** — and barely
+The classifier leans most on a **surface cue - the question mark** - and barely
 uses the negation feature at all. That single line explains most of its errors
 in section 4.
 
@@ -148,17 +148,17 @@ Trained on 40, evaluated once on the 20 test messages:
 
 Figures: `ml_decision_boundary.png` (boundary in a 2D PCA projection of the
 selected feature space; the 2D model itself scores 0.825 train / 0.650 test),
-`ml_decision_boundary_lexicon.png` (boundary on the two raw lexicon features —
+`ml_decision_boundary_lexicon.png` (boundary on the two raw lexicon features -
 readable axes, 0.825 train / 0.750 test), `ml_test_scores.png`,
 `ml_confusion_matrix.png`.
 
 The gap between 0.975 train and 0.600 test is plain **overfitting**: the degree-2
 kernel can separate 40 points almost perfectly, and CV on 40 points is too noisy
-to catch it (fold accuracies ranged 0.75–1.00).
+to catch it (fold accuracies ranged 0.75-1.00).
 
 ---
 
-## 3. Approach 2 — Decision model (zero-shot, structured output)
+## 3. Approach 2 - Decision model (zero-shot, structured output)
 
 A commercial Decision API such as **Jev by TypeSafe AI** takes a message plus
 routing instructions and returns a typed decision. We had no paid API, so we used
@@ -168,7 +168,7 @@ free text.
 
 | | |
 |---|---|
-| Model | `facebook/bart-large-mnli` — BART-large (407M params) fine-tuned on MultiNLI |
+| Model | `facebook/bart-large-mnli` - BART-large (407M params) fine-tuned on MultiNLI |
 | License | **MIT** for the model weights; the MultiNLI training corpus is distributed under its own permissive terms (see the model card) |
 | Setup | pre-downloaded into the local HuggingFace cache, run with `HF_HUB_OFFLINE=1`, **CPU only, no API key, no network call, no training on our data** |
 | Method | zero-shot classification by natural-language inference: the message is the premise, each candidate label is verbalised into a hypothesis, entailment scores are softmaxed against each other |
@@ -180,10 +180,10 @@ Four variants were written and **selected on the 40 training messages only**:
 
 | Variant | Train accuracy |
 |---|---|
-| `A_short_team` — "handled by the {customer service / sales} team" | 0.750 |
-| **`B_topic` — "This customer message is about {…}."** | **0.875** |
-| `C_long_routing` — long "routed to the … team, because …" | 0.750 |
-| `D_intent` — "The customer's intent is {…}." | 0.675 |
+| `A_short_team` - "handled by the {customer service / sales} team" | 0.750 |
+| **`B_topic` - "This customer message is about {...}."** | **0.875** |
+| `C_long_routing` - long "routed to the ... team, because ..." | 0.750 |
+| `D_intent` - "The customer's intent is {...}." | 0.675 |
 
 **Selected (`B_topic`):**
 
@@ -196,7 +196,7 @@ decision threshold  : 0.41   (also selected on the training split)
 
 The wording matters a lot: the worst variant is 20 points below the best. This is
 the decision-model equivalent of hyperparameter tuning, and it is **free of
-labelled training in the ML sense** — it needs a handful of examples to sanity-check
+labelled training in the ML sense** - it needs a handful of examples to sanity-check
 the instructions, not a training set.
 
 ### 3.2 Output validation
@@ -210,12 +210,12 @@ The wrapper (`src/decision_model.py`) turns the raw scores into
 
 and rejects anything that fails the schema: `decision` must be in the enum
 `{customer_service, sales}`, `confidence` must be a float in `[0, 1]`, `scores`
-must cover exactly the two allowed labels, sum to 1.0 (±1e-3), and agree with
+must cover exactly the two allowed labels, sum to 1.0 (+/-1e-3), and agree with
 `confidence`. A failure raises `OutputValidationError`.
 
 **0 of 60 outputs failed validation.**
 
-On top of the schema there is an **abstention band** of ±0.05 around the
+On top of the schema there is an **abstention band** of +/-0.05 around the
 threshold: inside it the wrapper returns `"uncertain"` and the router falls back
 to `customer_service` (flag 0), so an unsure sales guess never strands a customer
 who has a real problem. 3 of 60 messages abstained (0 of the 20 test messages).
@@ -223,7 +223,7 @@ who has a real problem. 3 of 60 messages abstained (0 of the 20 test messages).
 ### 3.3 Results
 
 * test accuracy **0.950**, macro F1 **0.950**
-* across all 60 messages **0.850** (the test split happens to be the easier half —
+* across all 60 messages **0.850** (the test split happens to be the easier half -
   we report both so the headline number is not oversold)
 * latency **546 ms/message** on CPU; model load ~9 s
 
@@ -268,7 +268,7 @@ In the business scenario that is the expensive error.
 
 **Paired comparison.** The two routers agree on 65% of the test messages. On the
 7 messages where they differ, the decision model is right **7 times and the ML
-router 0 times**. Exact two-sided McNemar: **p = 0.0156** — significant at 0.05,
+router 0 times**. Exact two-sided McNemar: **p = 0.0156** - significant at 0.05,
 even on 20 messages. 12 messages both get right, 1 both get wrong.
 
 ### 4.1 Error analysis
@@ -278,17 +278,17 @@ Every ML error (`results/ml_errors.csv`, `results/error_overlap.csv`):
 | id | true | ML | DM | Message | Why ML failed |
 |---|---|---|---|---|---|
 | 12 | 0 | **1** | 0 | "It's been fourteen days and the package I ordered is nowhere to be seen." | *ordered* fires the purchase lexicon; the complaint is in the sentence structure, not the words |
-| 13 | 0 | **1** | 0 | "I did not order this upgrade, so why am I being billed for it?" | *upgrade*, *order*, and a `?` — the negation feature barely counts |
+| 13 | 0 | **1** | 0 | "I did not order this upgrade, so why am I being billed for it?" | *upgrade*, *order*, and a `?` - the negation feature barely counts |
 | 14 | 0 | **1** | 0 | "I never asked for the premium package, but it is on my invoice." | same: *premium package* outweighs *never asked* |
 | 17 | 0 | **1** | 0 | "The app doesn't open on my phone anymore." | short message, no support keyword in the lexicon, no `?` |
 | 25 | 0 | **1** | 0 | "Before I buy a second license, can you fix the error the first one keeps showing?" | mixed intent: *buy*, *second*, `?` dominate *fix the error* |
 | 26 | 0 | **1** | 0 | "The license I already have keeps throwing an error; I'd like that sorted before purchasing another." | mixed intent, same cause |
-| 43 | 1 | **0** | **0** | "Nothing is wrong with my service, I just want a faster plan." | *nothing is wrong* + *service* read as a complaint — **both routers fail this one** |
+| 43 | 1 | **0** | **0** | "Nothing is wrong with my service, I just want a faster plan." | *nothing is wrong* + *service* read as a complaint - **both routers fail this one** |
 | 44 | 1 | **0** | 1 | "No problems at all with my connection; I simply want to upgrade the speed." | same shape; the decision model gets it right |
 
 The single decision-model error is id 43, the hardest negation in the set: a
 sales message built almost entirely out of support vocabulary. It scored 0.07 for
-sales — confidently wrong, well outside the abstention band, so the wrapper did
+sales - confidently wrong, well outside the abstention band, so the wrapper did
 not catch it. That is the honest limitation of the approach: validation checks
 the *shape* of the answer, never its correctness.
 
@@ -302,12 +302,12 @@ Two checks were run so the 0.600 is not misread:
 
 * **Post-hoc sensitivity** (`results/ml_posthoc_sensitivity.csv`): the top six CV
   configurations score between **0.60 and 0.75** on the test set. They were *not*
-  used to select the model — reporting them after the fact shows how unstable the
+  used to select the model - reporting them after the fact shows how unstable the
   choice is at this dataset size. Even the luckiest of them stays 20 points below
   the decision model.
 * **Learning curve** (`results/ml_learning_curve.png`): grouped-CV accuracy of the
   selected configuration rises from 0.69 at 12 training messages to **0.83 at 40**
-  and is still climbing. The trained approach is not broken — it is **starved of
+  and is still climbing. The trained approach is not broken - it is **starved of
   data**. The decision model reaches 0.95 on test with **zero labelled training
   examples**.
 
@@ -324,7 +324,7 @@ Reasons, in order of weight:
    statistically significant (McNemar p = 0.0156). It never routes a customer with
    a real problem to sales in our test (support recall 1.00 vs 0.40).
 2. **It needs no labelled data.** The trained classifier would need several
-   hundred labelled messages to close the gap — our learning curve is still rising
+   hundred labelled messages to close the gap - our learning curve is still rising
    at 40. That is weeks of annotation before KIO routes anything.
 3. **It handles the hard cases.** Negation and mixed intent are exactly the real
    customer messages that matter, and those are where the classifier collapses
@@ -335,7 +335,7 @@ Reasons, in order of weight:
 
 Costs we accept, and how to manage them:
 
-* **Latency**: 546 ms vs 0.23 ms per message — roughly 2 400× slower. Acceptable
+* **Latency**: 546 ms vs 0.23 ms per message - roughly 2 400x slower. Acceptable
   for a chat turn; if it is not, cache repeated messages or batch on GPU.
 * **Size**: a 1.6 GB model in memory versus a few kilobytes. It is MIT-licensed
   and runs offline, so there is no per-call fee and no customer data leaving the
@@ -348,7 +348,7 @@ Costs we accept, and how to manage them:
 **Suggested path.** Route with the decision model from day one, log every decision
 with its confidence, and have agents flag misroutes. After a few thousand real
 labelled messages, retrain the classifier on that log and re-run this exact
-comparison — the cheap, fast classifier becomes attractive again once the data
+comparison - the cheap, fast classifier becomes attractive again once the data
 exists. Until then, a hybrid is also available for free: use the classifier when
 both routers agree (65% of messages here, 12/13 of which are correct) and the
 decision model otherwise.
@@ -374,14 +374,19 @@ $env:HF_HUB_OFFLINE = "1"
 
 `src/agents.py` simulates the two specialist agents with functions that print
 their name, and shows KIO dispatching on the flag from both routers
-(`results/routing_demo.txt`). The real agents — LLM, search tools, RAG — are out
+(`results/routing_demo.txt`). The real agents - LLM, search tools, RAG - are out
 of scope for Project 1.
 
 ### Sources
 
 * Project 1 brief, *Routing for Agent KIO*.
 * `facebook/bart-large-mnli` model card, HuggingFace (MIT license).
-* Yin, Hay & Roth (2019), *Benchmarking Zero-shot Text Classification* — the
-  NLI-as-zero-shot-classifier method.
+* Yin, Hay & Roth (2019), *Benchmarking Zero-shot Text Classification: Datasets,
+  Evaluation and Entailment Approach* - the NLI-as-zero-shot-classifier method.
+* Williams, Nangia & Bowman (2018), *A Broad-Coverage Challenge Corpus for
+  Sentence Understanding through Inference* - MultiNLI, the fine-tuning corpus.
+* Dietterich (1998), *Approximate statistical tests for comparing supervised
+  classification learning algorithms* - McNemar's test for paired comparison.
 * scikit-learn 1.9.1 (`SVC`, `StratifiedGroupKFold`, `permutation_importance`),
-  transformers 5.20.1, torch 2.14.1+cpu.
+  transformers 5.20.1, torch 2.14.1+cpu, pandas 3.0.6, matplotlib 3.11.2,
+  seaborn 0.13.2, scipy 1.18.1, Python 3.12.10.

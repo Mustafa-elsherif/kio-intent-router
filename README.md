@@ -9,22 +9,22 @@ agents. One customer message in, one routing flag out:
 ```
 
 KIO uses the flag to call the selected agent. Routing picks the *workflow*;
-retrieval (RAG) then finds information inside it — a wrong route selects the
+retrieval (RAG) then finds information inside it - a wrong route selects the
 wrong tools and the wrong knowledge base, and the answer cannot recover.
 
 This repo builds the router **twice** and compares both on the same flag and the
 same test messages:
 
-1. **Traditional ML classifier** — numeric message features + an SVM / logistic
+1. **Traditional ML classifier** - numeric message features + an SVM / logistic
    regression, selected by cross-validation.
-2. **Decision model** — a local open-source zero-shot model wrapped so it returns
+2. **Decision model** - a local open-source zero-shot model wrapped so it returns
    a *validated structured decision* (`customer_service` / `sales`), standing in
    for a commercial Decision API such as Jev by TypeSafe AI.
 
-The specialist agents are simulated by functions that print their name — a full
+The specialist agents are simulated by functions that print their name - a full
 chatbot or RAG pipeline is out of scope (university course, Project 1).
 
-Full write-up: **[REPORT.md](REPORT.md)** · presentation plan:
+Full write-up: **[REPORT.md](REPORT.md)** | presentation plan:
 **[PRESENTATION_OUTLINE.md](PRESENTATION_OUTLINE.md)**
 
 ---
@@ -39,7 +39,7 @@ Full write-up: **[REPORT.md](REPORT.md)** · presentation plan:
 | Recall (sales) | 0.800 | 0.900 |
 | Precision (support) | 0.667 | 0.909 |
 | Recall (support) | **0.400** | **1.000** |
-| plain / negation / mixed | 7/8 · 3/8 · 2/4 | 8/8 · 7/8 · 4/4 |
+| plain / negation / mixed | 7/8, 3/8, 2/4 | 8/8, 7/8, 4/4 |
 | Latency per message (CPU) | 0.23 ms | 546 ms |
 | Labelled examples needed | 40, curve still rising | **0** |
 
@@ -53,7 +53,7 @@ true 1       2       8      true 1      1       9
 ```
 
 The two routers agree on 65% of test messages. On the 7 where they disagree the
-decision model is right 7 times and the classifier 0 — exact two-sided McNemar
+decision model is right 7 times and the classifier 0 - exact two-sided McNemar
 **p = 0.0156**, significant at 0.05. Across all 60 messages the decision model
 scores 0.850; the test half is the easier one, so both numbers are reported.
 
@@ -61,7 +61,7 @@ scores 0.850; the test half is the easier one, so both numbers are reported.
 accurate on exactly the messages that matter (negation and mixed intent), it
 never sent a customer with a real problem to sales in our test, it needs no
 labelled data, and its structured-output wrapper makes the flag safe to use in a
-pipeline. The classifier is not broken — it is starved of data; its learning
+pipeline. The classifier is not broken - it is starved of data; its learning
 curve is still climbing at 40 messages. Log every live decision with its
 confidence and revisit the classifier once a few thousand real labelled messages
 exist. Caveat: 20 test messages is a small sample, so the ranking is solid but
@@ -71,7 +71,7 @@ the exact numbers would move on a larger set.
 
 ## Dataset
 
-`data/messages.csv` — 60 synthetic English messages (`id, message, label, split`),
+`data/messages.csv` - 60 synthetic English messages (`id, message, label, split`),
 30 support + 30 sales, written as 30 **intent groups** of one base message plus a
 paraphrase. Categories: 24 plain, 20 negation, 16 mixed intent. Split 40 train /
 20 test, class-balanced, split **at group level** so paraphrases never straddle
@@ -102,7 +102,7 @@ the local HuggingFace cache. It is downloaded once:
 ```
 
 After that every run is offline (`HF_HUB_OFFLINE=1`), CPU-only, with no API key.
-The cache and the trained classifier are **not** committed — both are regenerated
+The cache and the trained classifier are **not** committed - both are regenerated
 by the commands below.
 
 ## Running
@@ -150,7 +150,7 @@ PRESENTATION_OUTLINE.md  8-minute, 3-student presentation plan
 | `results/comparison_summary.json` | both approaches, McNemar test, agreement |
 | `results/ml_cv_results.csv` | all 50 cross-validated ML configurations |
 | `results/ml_feature_importance.csv` | permutation importance of the 11 features |
-| `results/zeroshot_config_selection.csv` | instruction variant × threshold search |
+| `results/zeroshot_config_selection.csv` | instruction variant x threshold search |
 | `results/*_errors.csv` | every misrouted message, per approach |
 | `results/ml_decision_boundary_lexicon.png` | the classifier's boundary on readable axes |
 | `results/ml_learning_curve.png` | how much labelled data the classifier still needs |
@@ -166,16 +166,16 @@ PRESENTATION_OUTLINE.md  8-minute, 3-student presentation plan
   never validated on the near-duplicate of a message it trained on.
 * **Output validation.** Every decision-model answer is parsed into
   `{"decision", "confidence", "scores"}` and schema-checked; 0 of 60 failed. An
-  abstention band of ±0.05 around the threshold falls back to support, the safe
+  abstention band of +/-0.05 around the threshold falls back to support, the safe
   default.
 * **Every number here comes from a run that was actually executed**, including the
   ones that are unflattering to the trained classifier.
 
 ## Licenses and sources
 
-* `facebook/bart-large-mnli` — **MIT** (model weights); MultiNLI corpus under its
+* `facebook/bart-large-mnli` - **MIT** (model weights); MultiNLI corpus under its
   own permissive terms. See the model card.
-* Yin, Hay & Roth (2019), *Benchmarking Zero-shot Text Classification* — the
+* Yin, Hay & Roth (2019), *Benchmarking Zero-shot Text Classification* - the
   NLI-as-zero-shot-classification method.
 * scikit-learn 1.9.1, transformers 5.20.1, torch 2.14.1+cpu, pandas 3.0.6.
-* Project brief: *Project 1 — Routing for Agent KIO*.
+* Project brief: *Project 1 - Routing for Agent KIO*.
