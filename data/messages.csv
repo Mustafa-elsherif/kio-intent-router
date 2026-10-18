@@ -1,0 +1,61 @@
+id,message,label,split
+1,My internet connection keeps dropping every evening.,0,test
+2,Every night my Wi-Fi disconnects over and over again.,0,test
+3,I was charged twice for my subscription this month.,0,train
+4,There are two identical charges for my plan on this month's bill.,0,train
+5,I can't log in to my account since the last update.,0,train
+6,Since your latest update my login stops working.,0,train
+7,The router you sent me arrived damaged.,0,train
+8,My new router came in the box with a cracked case.,0,train
+9,I want to cancel my subscription.,0,train
+10,Please close my account and stop the monthly payments.,0,train
+11,My order still hasn't arrived after two weeks.,0,test
+12,It's been fourteen days and the package I ordered is nowhere to be seen.,0,test
+13,"I did not order this upgrade, so why am I being billed for it?",0,test
+14,"I never asked for the premium package, but it is on my invoice.",0,test
+15,"I'm not looking to buy anything, I just need my router fixed.",0,train
+16,"No new products please, I only want my broken modem repaired.",0,train
+17,The app doesn't open on my phone anymore.,0,test
+18,Your app won't start on my phone no matter what I try.,0,test
+19,I haven't received the refund you promised last month.,0,train
+20,The refund I was promised still hasn't shown up in my account.,0,train
+21,The discount I was promised is not applied to my bill.,0,train
+22,My bill doesn't show the discount your agent promised me.,0,train
+23,"My internet has been down since yesterday; also, do you have faster plans?",0,train
+24,"Nothing has worked on my line since yesterday, and I might want to upgrade later.",0,train
+25,"Before I buy a second license, can you fix the error the first one keeps showing?",0,test
+26,The license I already have keeps throwing an error; I'd like that sorted before purchasing another.,0,test
+27,"I'd love to upgrade to the premium plan, but my current one has been overcharging me.",0,train
+28,"I'm thinking of buying premium, but first explain why my current bill is too high.",0,train
+29,Your sales rep sold me a package that doesn't include the channels I was promised.,0,train
+30,The bundle I bought from your sales team is missing the channels they promised.,0,train
+31,How much does the business fiber plan cost?,1,train
+32,What's the price of your fiber package for businesses?,1,train
+33,I'd like to buy three more licenses for my team.,1,test
+34,Can I purchase three additional user licenses for my staff?,1,test
+35,Can you send me a quote for 50 employee accounts?,1,train
+36,Please prepare a price quote for fifty staff accounts.,1,train
+37,Which package would you recommend for a small office?,1,train
+38,What plan do you suggest for an office with ten people?,1,train
+39,Do you offer a discount if I pay yearly?,1,train
+40,Is there a cheaper price for an annual subscription?,1,train
+41,I want to sign up for your mobile plan.,1,test
+42,How do I subscribe to the new mobile package?,1,test
+43,"Nothing is wrong with my service, I just want a faster plan.",1,test
+44,No problems at all with my connection; I simply want to upgrade the speed.,1,test
+45,"I don't have an account yet, but I'm interested in your TV bundle.",1,train
+46,I'm not a customer yet - can you tell me about the TV package?,1,train
+47,"I don't need technical help, I need pricing for the enterprise package.",1,train
+48,This is not a support question: what does the enterprise tier cost?,1,train
+49,I'm not unhappy with anything; I just want to add a second phone line.,1,train
+50,"No complaints here, I'd only like an extra line on my plan.",1,train
+51,"Doesn't the premium plan include international calls? If it does, I'll buy it.",1,test
+52,"If the premium package has international calling, I'm ready to purchase it.",1,test
+53,"My last issue was fixed quickly, thanks! Now I'd like to order the security add-on.",1,train
+54,Thanks for solving my problem last week; next I want to buy the security add-on.,1,train
+55,I'm happy with my current plan and want to add the streaming package.,1,train
+56,My current subscription works great; please add the streaming bundle to it.,1,train
+57,My contract ends next month - what upgrade offers do you have for loyal customers?,1,train
+58,"Since my contract is ending soon, which renewal deals can you offer me?",1,train
+59,"Our team is growing, so we need to move from the basic to the business package.",1,test
+60,We're hiring more people and want to switch up to the business plan.,1,test

@@ -1,0 +1,31 @@
+{
+  "n_messages": 60,
+  "n_groups": 30,
+  "seed": 42,
+  "counts_split_label": {
+    "test_support": 10,
+    "test_sales": 10,
+    "train_support": 20,
+    "train_sales": 20
+  },
+  "counts_split_category": {
+    "test_mixed": 4,
+    "test_negation": 8,
+    "test_plain": 8,
+    "train_mixed": 12,
+    "train_negation": 12,
+    "train_plain": 16
+  },
+  "test_groups": [
+    "L02",
+    "L06",
+    "L07",
+    "L11",
+    "L15",
+    "S01",
+    "S06",
+    "S07",
+    "S09",
+    "S13"
+  ]
+}

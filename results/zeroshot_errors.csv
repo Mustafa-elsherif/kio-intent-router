@@ -1,0 +1,2 @@
+id,message,label,split,group_id,category,score_sales,score_customer_service,raw_decision,confidence,schema_valid,abstained,final_decision,pred_flag,decision_json,correct
+43,"Nothing is wrong with my service, I just want a faster plan.",1,test,L07,negation,0.0703,0.9297,customer_service,0.9297,True,False,customer_service,0,"{""confidence"": 0.9296600297093391, ""decision"": ""customer_service"", ""scores"": {""customer_service"": 0.9296600297093391, ""sales"": 0.07033997029066086}}",False

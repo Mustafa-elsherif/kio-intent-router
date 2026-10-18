@@ -1,0 +1,35 @@
+# Python environment
+venv/
+.venv/
+env/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Model caches and weights (facebook/bart-large-mnli is ~1.6 GB - never commit it)
+hf_cache/
+.cache/
+models/
+*.joblib
+*.pkl
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.onnx
+*.h5
+*.ckpt
+
+# Secrets
+.env
+.env.*
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log

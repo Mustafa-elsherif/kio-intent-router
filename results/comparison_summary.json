@@ -1,0 +1,96 @@
+{
+  "test_set_size": 20,
+  "traditional_ml": {
+    "config": {
+      "feature_set": "hand",
+      "model": "svm_poly2",
+      "C": 1
+    },
+    "cv_accuracy": 0.825,
+    "train_accuracy": 0.975,
+    "test": {
+      "n": 20,
+      "accuracy": 0.6,
+      "precision_sales": 0.5714285714285714,
+      "recall_sales": 0.8,
+      "f1_sales": 0.6666666666666666,
+      "precision_support": 0.6666666666666666,
+      "recall_support": 0.4,
+      "f1_support": 0.5,
+      "f1_macro": 0.5833333333333333,
+      "confusion_matrix": [
+        [
+          4,
+          6
+        ],
+        [
+          2,
+          8
+        ]
+      ]
+    },
+    "latency_ms_per_message": 0.2328500006115064,
+    "by_category": {
+      "mixed": "2/4",
+      "negation": "3/8",
+      "plain": "7/8"
+    }
+  },
+  "decision_model": {
+    "model": "facebook/bart-large-mnli",
+    "config": "B_topic",
+    "threshold": 0.41,
+    "train_accuracy": 0.875,
+    "test": {
+      "n": 20,
+      "accuracy": 0.95,
+      "precision_sales": 1.0,
+      "recall_sales": 0.9,
+      "f1_sales": 0.9473684210526315,
+      "precision_support": 0.9090909090909091,
+      "recall_support": 1.0,
+      "f1_support": 0.9523809523809523,
+      "f1_macro": 0.949874686716792,
+      "confusion_matrix": [
+        [
+          10,
+          0
+        ],
+        [
+          1,
+          9
+        ]
+      ]
+    },
+    "accuracy_all_60": 0.85,
+    "latency_ms_per_message": 545.6457304166785,
+    "by_category": {
+      "mixed": "4/4",
+      "negation": "7/8",
+      "plain": "8/8"
+    },
+    "abstentions_test": 0,
+    "schema_invalid_outputs": 0
+  },
+  "paired_test": {
+    "method": "exact two-sided McNemar on the 20 test messages",
+    "ml_right_dm_wrong": 0,
+    "ml_wrong_dm_right": 7,
+    "p_value": 0.015625,
+    "significant_at_0.05": true
+  },
+  "agreement_rate": 0.65,
+  "both_correct": 12,
+  "only_ml_correct": 0,
+  "only_dm_correct": 7,
+  "both_wrong": 1,
+  "learning_curve_last": {
+    "n_train_messages": 40,
+    "cv_accuracy_mean": 0.8312499999999999
+  },
+  "posthoc_sensitivity_note": "test accuracies of the top-6 CV configurations; reported after the fact, they played no part in selecting the model",
+  "posthoc_test_accuracy_range": [
+    0.6,
+    0.75
+  ]
+}

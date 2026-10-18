@@ -1,0 +1,25 @@
+Loading routers (zero-shot model loads from the local cache, ~10 s)...
+
+KIO received: 'My internet has been down since yesterday, and I may want a faster plan later.'
+  [traditional ML]   flag 0 = support
+    -> SUPPORT AGENT handling: 'My internet has been down since yesterday, and I may want a faster plan later.'
+  [decision model]   decision 'uncertain' conf 0.63  (abstained -> safe default) -> flag 0 = support
+    -> SUPPORT AGENT handling: 'My internet has been down since yesterday, and I may want a faster plan later.'
+
+KIO received: 'How much does the business fiber plan cost?'
+  [traditional ML]   flag 1 = sales
+    -> SALES AGENT handling: 'How much does the business fiber plan cost?'
+  [decision model]   decision 'sales' conf 0.95 -> flag 1 = sales
+    -> SALES AGENT handling: 'How much does the business fiber plan cost?'
+
+KIO received: 'Nothing is wrong with my service, I just want a faster plan.'
+  [traditional ML]   flag 0 = support
+    -> SUPPORT AGENT handling: 'Nothing is wrong with my service, I just want a faster plan.'
+  [decision model]   decision 'customer_service' conf 0.93 -> flag 0 = support
+    -> SUPPORT AGENT handling: 'Nothing is wrong with my service, I just want a faster plan.'
+
+KIO received: 'I did not order this upgrade, so why am I being billed for it?'
+  [traditional ML]   flag 1 = sales
+    -> SALES AGENT handling: 'I did not order this upgrade, so why am I being billed for it?'
+  [decision model]   decision 'customer_service' conf 0.75 -> flag 0 = support
+    -> SUPPORT AGENT handling: 'I did not order this upgrade, so why am I being billed for it?'

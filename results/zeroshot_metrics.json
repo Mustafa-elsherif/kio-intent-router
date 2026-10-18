@@ -1,0 +1,76 @@
+{
+  "model": "facebook/bart-large-mnli",
+  "license": "MIT (model weights); MultiNLI corpus under its own terms",
+  "setup": "local HuggingFace cache, HF_HUB_OFFLINE=1, CPU, no fine-tuning, no API key",
+  "selection": "instruction variant and decision threshold chosen by accuracy on the 40 training messages only",
+  "selected_config": "B_topic",
+  "hypothesis_template": "This customer message is about {}.",
+  "candidate_labels": {
+    "customer_service": "a problem with a service the customer already has",
+    "sales": "buying a new product, a price or an upgrade"
+  },
+  "decision_threshold": 0.41,
+  "abstain_band": 0.05,
+  "fallback_decision": "customer_service",
+  "train_accuracy_per_config": {
+    "A_short_team": 0.75,
+    "B_topic": 0.875,
+    "C_long_routing": 0.75,
+    "D_intent": 0.675
+  },
+  "train_accuracy": 0.875,
+  "schema_invalid_outputs": 0,
+  "n_abstentions_total": 3,
+  "n_abstentions_test": 0,
+  "load_seconds": 1.7383723999955691,
+  "seconds_per_message": 0.5456457304166785,
+  "test": {
+    "n": 20,
+    "accuracy": 0.95,
+    "precision_sales": 1.0,
+    "recall_sales": 0.9,
+    "f1_sales": 0.9473684210526315,
+    "precision_support": 0.9090909090909091,
+    "recall_support": 1.0,
+    "f1_support": 0.9523809523809523,
+    "f1_macro": 0.949874686716792,
+    "confusion_matrix": [
+      [
+        10,
+        0
+      ],
+      [
+        1,
+        9
+      ]
+    ]
+  },
+  "all_60": {
+    "n": 60,
+    "accuracy": 0.85,
+    "precision_sales": 0.8620689655172413,
+    "recall_sales": 0.8333333333333334,
+    "f1_sales": 0.847457627118644,
+    "precision_support": 0.8387096774193549,
+    "recall_support": 0.8666666666666667,
+    "f1_support": 0.8524590163934426,
+    "f1_macro": 0.8499583217560434,
+    "confusion_matrix": [
+      [
+        26,
+        4
+      ],
+      [
+        5,
+        25
+      ]
+    ]
+  },
+  "test_accuracy_by_category": {
+    "mixed": "4/4",
+    "negation": "7/8",
+    "plain": "8/8"
+  },
+  "mean_confidence_correct": 0.8176196078431373,
+  "mean_confidence_wrong": 0.6313555555555556
+}

@@ -1,0 +1,21 @@
+id,message,label,category,ml_flag,ml_score,ml_correct,dm_flag,dm_score_sales,dm_decision,dm_correct,both_correct,only_ml_correct,only_dm_correct,both_wrong
+1,My internet connection keeps dropping every evening.,0,plain,0,-1.4464633801592082,True,0,0.1355,customer_service,True,True,False,False,False
+2,Every night my Wi-Fi disconnects over and over again.,0,plain,0,-1.646731742669341,True,0,0.0383,customer_service,True,True,False,False,False
+11,My order still hasn't arrived after two weeks.,0,plain,0,-1.102929753440888,True,0,0.1083,customer_service,True,True,False,False,False
+12,It's been fourteen days and the package I ordered is nowhere to be seen.,0,plain,1,0.0241216664897891,False,0,0.326,customer_service,True,False,False,True,False
+13,"I did not order this upgrade, so why am I being billed for it?",0,negation,1,1.618393800268513,False,0,0.2528,customer_service,True,False,False,True,False
+14,"I never asked for the premium package, but it is on my invoice.",0,negation,1,0.1992980196714494,False,0,0.2654,customer_service,True,False,False,True,False
+17,The app doesn't open on my phone anymore.,0,negation,1,0.1903800265100013,False,0,0.1016,customer_service,True,False,False,True,False
+18,Your app won't start on my phone no matter what I try.,0,negation,0,-0.2935916968189732,True,0,0.0267,customer_service,True,True,False,False,False
+25,"Before I buy a second license, can you fix the error the first one keeps showing?",0,mixed,1,0.7510215953898912,False,0,0.2958,customer_service,True,False,False,True,False
+26,The license I already have keeps throwing an error; I'd like that sorted before purchasing another.,0,mixed,1,0.5492132390354865,False,0,0.0865,customer_service,True,False,False,True,False
+33,I'd like to buy three more licenses for my team.,1,plain,1,3.804110604896205,True,1,0.9058,sales,True,True,False,False,False
+34,Can I purchase three additional user licenses for my staff?,1,plain,1,3.522091527828693,True,1,0.8721,sales,True,True,False,False,False
+41,I want to sign up for your mobile plan.,1,plain,1,1.768523391470751,True,1,0.9824,sales,True,True,False,False,False
+42,How do I subscribe to the new mobile package?,1,plain,1,2.9000443569584724,True,1,0.9615,sales,True,True,False,False,False
+43,"Nothing is wrong with my service, I just want a faster plan.",1,negation,0,-0.0507934118635405,False,0,0.0703,customer_service,False,False,False,False,True
+44,No problems at all with my connection; I simply want to upgrade the speed.,1,negation,0,-0.6590831631836156,False,1,0.5793,sales,True,False,False,True,False
+51,"Doesn't the premium plan include international calls? If it does, I'll buy it.",1,negation,1,2.07810695988024,True,1,0.7301,sales,True,True,False,False,False
+52,"If the premium package has international calling, I'm ready to purchase it.",1,negation,1,1.2684582086669989,True,1,0.9357,sales,True,True,False,False,False
+59,"Our team is growing, so we need to move from the basic to the business package.",1,mixed,1,1.375260737918414,True,1,0.8686,sales,True,True,False,False,False
+60,We're hiring more people and want to switch up to the business plan.,1,mixed,1,1.6523202401426955,True,1,0.863,sales,True,True,False,False,False

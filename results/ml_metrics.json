@@ -1,0 +1,65 @@
+{
+  "selected": {
+    "feature_set": "hand",
+    "model": "svm_poly2",
+    "C": 1
+  },
+  "selection": "5-fold StratifiedGroupKFold on the training split (groups = paraphrase pairs), accuracy, 45 configurations",
+  "best_cv_mean_accuracy": 0.825,
+  "best_cv_std_accuracy": 0.09999999999999999,
+  "cv_best_per_feature_set": {
+    "hand": 0.825,
+    "tfidf_1_1": 0.725,
+    "tfidf_1_2": 0.725,
+    "union": 0.8
+  },
+  "cv_best_per_model": {
+    "logreg_poly2": 0.8,
+    "svm_linear": 0.8,
+    "svm_poly2": 0.825
+  },
+  "n_features": 11,
+  "train_accuracy": 0.975,
+  "test": {
+    "n": 20,
+    "accuracy": 0.6,
+    "precision_sales": 0.5714285714285714,
+    "recall_sales": 0.8,
+    "f1_sales": 0.6666666666666666,
+    "precision_support": 0.6666666666666666,
+    "recall_support": 0.4,
+    "f1_support": 0.5,
+    "f1_macro": 0.5833333333333333,
+    "confusion_matrix": [
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        8
+      ]
+    ]
+  },
+  "test_accuracy_by_category": {
+    "mixed": "2/4",
+    "negation": "3/8",
+    "plain": "7/8"
+  },
+  "latency_ms_per_message": 0.051769998390227556,
+  "projection_2d": {
+    "method": "PCA(2) fitted on the training split, then linear SVC",
+    "C": 1,
+    "train_accuracy": 0.825,
+    "test_accuracy": 0.65
+  },
+  "lexicon_2d": {
+    "features": [
+      "support_hits",
+      "sales_hits"
+    ],
+    "C": 0.01,
+    "train_accuracy": 0.825,
+    "test_accuracy": 0.75
+  }
+}

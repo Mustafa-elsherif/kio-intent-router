@@ -1,0 +1,9 @@
+id,message,label,group_id,category,pred_flag,decision_score,correct
+12,It's been fourteen days and the package I ordered is nowhere to be seen.,0,S06,plain,1,0.024121666489789195,False
+13,"I did not order this upgrade, so why am I being billed for it?",0,S07,negation,1,1.618393800268513,False
+14,"I never asked for the premium package, but it is on my invoice.",0,S07,negation,1,0.19929801967144944,False
+17,The app doesn't open on my phone anymore.,0,S09,negation,1,0.1903800265100013,False
+25,"Before I buy a second license, can you fix the error the first one keeps showing?",0,S13,mixed,1,0.7510215953898912,False
+26,The license I already have keeps throwing an error; I'd like that sorted before purchasing another.,0,S13,mixed,1,0.5492132390354865,False
+43,"Nothing is wrong with my service, I just want a faster plan.",1,L07,negation,0,-0.05079341186354053,False
+44,No problems at all with my connection; I simply want to upgrade the speed.,1,L07,negation,0,-0.6590831631836156,False
