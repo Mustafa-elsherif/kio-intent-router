@@ -98,7 +98,7 @@ products is intractable here; the polynomial *kernel* covers the non-linear case
 for the sparse representations).
 
 Selection was by **5-fold StratifiedGroupKFold cross-validation on the 40
-training messages only**, with paraphrase pairs as groups. 50 configurations were
+training messages only**, with paraphrase pairs as groups. 45 configurations were
 scored (`results/ml_cv_results.csv`). The test split was touched exactly once,
 after selection.
 
@@ -144,7 +144,7 @@ in section 4.
 Trained on 40, evaluated once on the 20 test messages:
 
 * train accuracy **0.975**, test accuracy **0.600**, macro F1 **0.583**
-* prediction latency **0.23 ms/message** on CPU
+* prediction latency **0.06 ms/message** on CPU (median of 51 repeats)
 
 Figures: `ml_decision_boundary.png` (boundary in a 2D PCA projection of the
 selected feature space; the 2D model itself scores 0.825 train / 0.650 test),
@@ -335,7 +335,7 @@ Reasons, in order of weight:
 
 Costs we accept, and how to manage them:
 
-* **Latency**: 546 ms vs 0.23 ms per message - roughly 2 400x slower. Acceptable
+* **Latency**: 546 ms vs 0.06 ms per message - roughly 9 000x slower. Acceptable
   for a chat turn; if it is not, cache repeated messages or batch on GPU.
 * **Size**: a 1.6 GB model in memory versus a few kilobytes. It is MIT-licensed
   and runs offline, so there is no per-call fee and no customer data leaving the

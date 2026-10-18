@@ -252,9 +252,15 @@ def main():
     model = make_pipeline(**best).fit(train.message, train.label)
     joblib.dump(model, MODELS_DIR / "ml_router.joblib")
 
-    t0 = time.perf_counter()
     pred = model.predict(test.message)
-    latency_ms = (time.perf_counter() - t0) * 1000 / len(test)
+    # Timing one pass over 20 short messages is mostly noise, so take the median
+    # of 51 repeats. Reported per message.
+    timings = []
+    for _ in range(51):
+        t0 = time.perf_counter()
+        model.predict(test.message)
+        timings.append((time.perf_counter() - t0) * 1000 / len(test))
+    latency_ms = float(np.median(timings))
     scores = model.decision_function(test.message)
     train_acc = float((model.predict(train.message) == train.label).mean())
     metrics = compute_metrics(test.label, pred)

@@ -25,7 +25,8 @@ The specialist agents are simulated by functions that print their name - a full
 chatbot or RAG pipeline is out of scope (university course, Project 1).
 
 Full write-up: **[REPORT.md](REPORT.md)** | presentation plan:
-**[PRESENTATION_OUTLINE.md](PRESENTATION_OUTLINE.md)**
+**[PRESENTATION_OUTLINE.md](PRESENTATION_OUTLINE.md)** | the deck:
+**[KIO_Routing_Presentation.pptx](KIO_Routing_Presentation.pptx)** (11 slides, speaker notes, 7:30)
 
 ---
 
@@ -40,7 +41,7 @@ Full write-up: **[REPORT.md](REPORT.md)** | presentation plan:
 | Precision (support) | 0.667 | 0.909 |
 | Recall (support) | **0.400** | **1.000** |
 | plain / negation / mixed | 7/8, 3/8, 2/4 | 8/8, 7/8, 4/4 |
-| Latency per message (CPU) | 0.23 ms | 546 ms |
+| Latency per message (CPU) | 0.06 ms | 546 ms |
 | Labelled examples needed | 40, curve still rising | **0** |
 
 Confusion matrices (rows = true, columns = predicted):
@@ -91,7 +92,7 @@ Windows, PowerShell. Python 3.12 with `torch`, `transformers`, `scikit-learn`,
 
 ```powershell
 python -m venv venv
-.\venv\Scripts\python.exe -m pip install torch transformers scikit-learn pandas matplotlib seaborn
+.\venv\Scripts\python.exe -m pip install torch transformers scikit-learn pandas matplotlib seaborn python-pptx
 ```
 
 The decision model needs **`facebook/bart-large-mnli`** (~1.6 GB, MIT licensed) in
@@ -113,12 +114,16 @@ Run in this order; each script is standalone and writes its outputs to `results/
 $py = ".\venv\Scripts\python.exe"
 
 & $py src\generate_dataset.py    # data/messages.csv, data/message_groups.csv   (seconds)
-& $py src\train_classifier.py    # approach 1: 50-config CV search + test        (~1 min)
+& $py src\train_classifier.py    # approach 1: 45-config CV search + test        (~1 min)
 $env:HF_HUB_OFFLINE = "1"
 & $py src\decision_model.py      # approach 2: 4 instruction variants x 60 msgs  (~3 min, CPU)
 & $py src\compare.py             # comparison, McNemar, learning curve           (~1 min)
 & $py src\agents.py              # end-to-end demo through both routers
+& $py src\build_presentation.py  # KIO_Routing_Presentation.pptx                 (seconds)
 ```
+
+`build_presentation.py` needs `python-pptx`. It re-checks every number that
+appears on a slide against `results/*.json` and refuses to build if one drifted.
 
 `src/agents.py` also routes a single message:
 
@@ -137,9 +142,11 @@ src/       common.py              shared paths, metrics, plot styling
            decision_model.py      approach 2 - zero-shot + structured-output wrapper
            compare.py             comparative analysis and figures
            agents.py              simulated specialist agents + routing demo
+           build_presentation.py  renders the .pptx deck from the outline
 results/   metrics (JSON), per-message predictions and errors (CSV), figures (PNG)
 REPORT.md                method, features, settings, results, error analysis, recommendation
 PRESENTATION_OUTLINE.md  8-minute, 3-student presentation plan
+KIO_Routing_Presentation.pptx   the built deck: 11 slides, figures, speaker notes
 ```
 
 ### Key result files

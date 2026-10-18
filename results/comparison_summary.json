@@ -29,7 +29,7 @@
         ]
       ]
     },
-    "latency_ms_per_message": 0.2328500006115064,
+    "latency_ms_per_message": 0.06047000060789287,
     "by_category": {
       "mixed": "2/4",
       "negation": "3/8",
